@@ -1,5 +1,5 @@
 # Use the official Golang image
-FROM golang:1.20-alpine AS builder
+FROM golang:1.21-alpine AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -19,11 +19,14 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 # Use a minimal Alpine image for the final stage
 FROM alpine:latest
 
+# Install necessary libraries (if required)
+RUN apk add --no-cache bash
+
 # Copy the binary from the builder stage
 COPY --from=builder /app/main /main
 
 # Expose the port
 EXPOSE 8080
 
-# Run the application
+# Start the application
 CMD ["./main"]
