@@ -1,0 +1,10 @@
+# Ignore .env file
+.env
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+
+# Ignore binaries and build artifacts
+*.exe
+*.bin
