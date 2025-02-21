@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM golang:1.20 AS builder
+FROM golang:1.21 AS builder
 
 # Install necessary tools and libraries for SQLite
 RUN apt-get update && apt-get install -y \
