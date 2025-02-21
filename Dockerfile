@@ -33,7 +33,7 @@ RUN ls -la
 RUN chmod +x main
 
 # Stage 2: Create the final image
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 # Install SQLite runtime dependencies
 RUN apt-get update && apt-get install -y sqlite3
