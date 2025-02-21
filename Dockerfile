@@ -20,29 +20,32 @@ RUN go mod download
 # Copy the rest of the application code
 COPY . .
 
+# Debug: List files before building
+RUN ls -la
+
 # Build the application with CGO enabled
 RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o main .
-
-# Ensure the binary has execution permissions
-RUN chmod +x main
 
 # Debug: Verify the binary was created
 RUN ls -la
 
+# Ensure the binary has execution permissions
+RUN chmod +x main
+
 # Stage 2: Create the final image
-FROM alpine:latest
+FROM debian:buster-slim
 
 # Install SQLite runtime dependencies
-RUN apk add --no-cache sqlite
+RUN apt-get update && apt-get install -y sqlite3
 
 # Copy the binary from the builder stage
-COPY --from=builder /app/main /main
+COPY --from=builder /app/main /usr/local/bin/main
 
 # Debug: Verify the binary exists in the final image
-RUN ls -la
+RUN ls -la /usr/local/bin
 
 # Expose the port
 EXPOSE 8080
 
 # Start the application
-CMD ["./main"]
+CMD ["main"]
