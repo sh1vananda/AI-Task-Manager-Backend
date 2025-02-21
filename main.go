@@ -45,7 +45,7 @@ func main() {
 
 	// Enable CORS
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"ai-task-manager-frontend.vercel.app"},
+		AllowOrigins:     []string{"https://ai-task-manager-frontend-ee9twrfmy-llamatypes-projects.vercel.app"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
