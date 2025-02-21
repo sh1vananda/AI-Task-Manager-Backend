@@ -1,5 +1,5 @@
-# Use the official Golang image with CGO enabled
-FROM golang:1.21 AS builder
+# Stage 1: Build the application
+FROM golang:1.20 AS builder
 
 # Install necessary tools and libraries for SQLite
 RUN apt-get update && apt-get install -y \
@@ -21,9 +21,15 @@ RUN go mod download
 COPY . .
 
 # Build the application with CGO enabled
-RUN CGO_ENABLED=1 GOOS=linux go build -o main .
+RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o main .
 
-# Use a minimal Alpine image for the final stage
+# Ensure the binary has execution permissions
+RUN chmod +x main
+
+# Debug: Verify the binary was created
+RUN ls -la
+
+# Stage 2: Create the final image
 FROM alpine:latest
 
 # Install SQLite runtime dependencies
@@ -31,6 +37,9 @@ RUN apk add --no-cache sqlite
 
 # Copy the binary from the builder stage
 COPY --from=builder /app/main /main
+
+# Debug: Verify the binary exists in the final image
+RUN ls -la
 
 # Expose the port
 EXPOSE 8080
